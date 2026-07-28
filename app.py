@@ -15,9 +15,38 @@ from shapely.geometry import LineString, Point
 fiona.drvsupport.supported_drivers["KML"] = "rw"
 
 # Page Configuration
-st.set_page_config(page_title="Drone Spatial Toolkit", page_icon="🛸", layout="wide")
+st.set_page_config(page_title="Drone Spatial Toolkit", page_icon="🌐", layout="wide")
 
-st.title("🛸 All-in-One Drone Spatial Toolkit")
+# CSS to hide top-right GitHub icon, Streamlit header menu, and adjust image layout
+hide_github_style = """
+    <style>
+    #MainMenu {visibility: hidden;}
+    header {visibility: hidden;}
+    footer {visibility: hidden;}
+    .viewerBadge_container__13swm {visibility: hidden;}
+    .drone-title-container {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    .drone-img {
+        width: 60px;
+        height: auto;
+    }
+    </style>
+"""
+st.markdown(hide_github_style, unsafe_allow_html=True)
+
+# Direct Drone PNG Image Link
+DRONE_PNG_URL = "https://cdn-icons-png.flaticon.com/512/900/900782.png"
+
+# Header Layout with Drone PNG Image
+col_img, col_txt = st.columns([0.08, 0.92])
+with col_img:
+    st.image(DRONE_PNG_URL, width=65)
+with col_txt:
+    st.title("All-in-One Drone Spatial Toolkit")
+
 st.caption("🚀 Developed by **Rakesh Valmiki😎**")
 
 # Multi-file Uploader
@@ -79,11 +108,9 @@ def generate_kml_part_string(points, part_num):
 if uploaded_file is not None:
     file_ext = uploaded_file.name.split('.')[-1].lower()
 
-    # ==========================================
     # BRANCH 1: KML FILE FEATURES
-    # ==========================================
     if file_ext == "kml":
-        tab1, tab2 = st.tabs(["🚀 Optimize KML Path", "✂️ Split KML Path"])
+        tab1, tab2 = st.tabs(["🎯 Optimize KML Path", "✂️ Split KML Path"])
         
         # TAB 1: KML OPTIMIZATION
         with tab1:
@@ -190,9 +217,7 @@ if uploaded_file is not None:
                 except Exception as e:
                     st.error(f"❌ Processing Error: {str(e)}")
 
-    # ==========================================
     # BRANCH 2: EXCEL / CSV FILE FEATURES
-    # ==========================================
     elif file_ext in ["csv", "xlsx", "xls"]:
         default_alt = st.number_input("Default Flight Altitude (Meters)", value=30, step=1)
 
