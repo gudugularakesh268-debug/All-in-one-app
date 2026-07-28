@@ -16,7 +16,7 @@ fiona.drvsupport.supported_drivers["KML"] = "rw"
 
 # Page Configuration
 st.set_page_config(
-    page_title="Drone Spatial Toolkit", 
+    page_title="Drone Toolkit", 
     page_icon="🌐", 
     layout="wide",
     initial_sidebar_state="collapsed"
@@ -124,7 +124,7 @@ with col_img:
         st.title("🌐")
 
 with col_txt:
-    st.markdown('<h1 class="hero-title">All-in-One Drone Spatial Toolkit</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="hero-title">All-in-One Drone Toolkit</h1>', unsafe_allow_html=True)
     st.markdown('<p class="developer-tag">🚀 Developed by <strong>Rakesh Valmiki😎</strong></p>', unsafe_allow_html=True)
 
 st.markdown("---")
@@ -132,7 +132,7 @@ st.markdown("---")
 # Main File Uploader Card
 st.markdown('<div class="glass-card">', unsafe_allow_html=True)
 uploaded_file = st.file_uploader(
-    "📁 Upload Spatial File (.kml, .csv, .xlsx, .xls)", 
+    "📁 Upload File (.kml, .csv, .xlsx, .xls)", 
     type=["kml", "csv", "xlsx", "xls"]
 )
 st.markdown('</div>', unsafe_allow_html=True)
