@@ -15,45 +15,127 @@ from shapely.geometry import LineString, Point
 fiona.drvsupport.supported_drivers["KML"] = "rw"
 
 # Page Configuration
-st.set_page_config(page_title="Drone Spatial Toolkit", page_icon="🌐", layout="wide")
+st.set_page_config(
+    page_title="Drone Spatial Toolkit", 
+    page_icon="🌐", 
+    layout="wide",
+    initial_sidebar_state="collapsed"
+)
 
-# CSS to hide top-right GitHub icon, Streamlit header menu, and adjust image layout
-hide_github_style = """
-    <style>
+# Premium Custom CSS Styles
+custom_css = """
+<style>
+    /* Hide Default Header & Menu */
     #MainMenu {visibility: hidden;}
     header {visibility: hidden;}
     footer {visibility: hidden;}
     .viewerBadge_container__13swm {visibility: hidden;}
-    .drone-title-container {
-        display: flex;
-        align-items: center;
-        gap: 15px;
+    
+    /* Main Background & Fonts */
+    .main {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        color: #f8fafc;
+        font-family: 'Inter', sans-serif;
     }
-    .drone-img {
-        width: 60px;
-        height: auto;
+    
+    /* Hero Header Styling */
+    .hero-card {
+        background: rgba(30, 41, 59, 0.7);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     }
-    </style>
+    
+    .hero-title {
+        font-size: 2.2rem;
+        font-weight: 800;
+        background: linear-gradient(90deg, #38bdf8 0%, #818cf8 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin: 0;
+    }
+    
+    .developer-tag {
+        color: #94a3b8;
+        font-size: 0.95rem;
+        margin-top: 6px;
+    }
+    
+    /* Card Container */
+    .glass-card {
+        background: rgba(30, 41, 59, 0.5);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        padding: 20px;
+        margin-top: 15px;
+    }
+
+    /* Tabs Styling */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 12px;
+    }
+
+    .stTabs [data-baseweb="tab"] {
+        background-color: rgba(51, 65, 85, 0.5);
+        border-radius: 8px;
+        color: #cbd5e1;
+        padding: 8px 16px;
+        font-weight: 600;
+    }
+
+    .stTabs [aria-selected="true"] {
+        background: linear-gradient(90deg, #0284c7 0%, #4338ca 100%) !important;
+        color: #ffffff !important;
+    }
+
+    /* Primary Buttons Styling */
+    div.stButton > button {
+        background: linear-gradient(90deg, #0284c7 0%, #6366f1 100%);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 12px 24px;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
+        width: 100%;
+    }
+
+    div.stButton > button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(2, 132, 199, 0.6);
+        color: white;
+    }
+</style>
 """
-st.markdown(hide_github_style, unsafe_allow_html=True)
+st.markdown(custom_css, unsafe_allow_html=True)
 
-# Direct Drone PNG Image Link
-DRONE_PNG_URL = "https://cdn-icons-png.flaticon.com/512/900/900782.png"
-
-# Header Layout with Drone PNG Image
+# Hero Section
 col_img, col_txt = st.columns([0.08, 0.92])
 with col_img:
-    st.image(DRONE_PNG_URL, width=65)
+    if os.path.exists("drone.png"):
+        st.image("drone.png", width=70)
+    else:
+        st.title("🌐")
+
 with col_txt:
-    st.title("All-in-One Drone Spatial Toolkit")
+    st.markdown('<h1 class="hero-title">All-in-One Drone Spatial Toolkit</h1>', unsafe_allow_html=True)
+    st.markdown('<p class="developer-tag">🚀 Developed by <strong>Rakesh Valmiki😎</strong></p>', unsafe_allow_html=True)
 
-st.caption("🚀 Developed by **Rakesh Valmiki😎**")
+st.markdown("---")
 
-# Multi-file Uploader
+# Main File Uploader Card
+st.markdown('<div class="glass-card">', unsafe_allow_html=True)
 uploaded_file = st.file_uploader(
-    "Upload Spatial File (.kml, .csv, .xlsx, .xls)", 
+    "📁 Upload Spatial File (.kml, .csv, .xlsx, .xls)", 
     type=["kml", "csv", "xlsx", "xls"]
 )
+st.markdown('</div>', unsafe_allow_html=True)
 
 # Helper Functions for KML Operations
 def parse_kml_coordinates(kml_content):
@@ -110,10 +192,12 @@ if uploaded_file is not None:
 
     # BRANCH 1: KML FILE FEATURES
     if file_ext == "kml":
+        st.markdown('<div class="glass-card">', unsafe_allow_html=True)
         tab1, tab2 = st.tabs(["🎯 Optimize KML Path", "✂️ Split KML Path"])
         
         # TAB 1: KML OPTIMIZATION
         with tab1:
+            st.write("")
             if st.button("🚀 Process & Generate Optimized KML", type="primary"):
                 try:
                     temp_input_path = "temp_input.kml"
@@ -189,6 +273,7 @@ if uploaded_file is not None:
 
         # TAB 2: KML SPLITTING
         with tab2:
+            st.write("")
             col1, col2 = st.columns(2)
             with col1:
                 user_km = st.number_input("Segment Distance (KM)", value=15.0, step=1.0, min_value=0.1)
@@ -216,9 +301,11 @@ if uploaded_file is not None:
                         st.download_button("📥 Download All Split Parts (ZIP)", zip_buffer, file_name="Split_KML_Parts.zip", mime="application/zip")
                 except Exception as e:
                     st.error(f"❌ Processing Error: {str(e)}")
+        st.markdown('</div>', unsafe_allow_html=True)
 
     # BRANCH 2: EXCEL / CSV FILE FEATURES
     elif file_ext in ["csv", "xlsx", "xls"]:
+        st.markdown('<div class="glass-card">', unsafe_allow_html=True)
         default_alt = st.number_input("Default Flight Altitude (Meters)", value=30, step=1)
 
         if st.button("🚀 Convert to Litchi CSV", type="primary"):
@@ -267,3 +354,4 @@ if uploaded_file is not None:
 
             except Exception as e:
                 st.error(f"❌ Processing Error: {str(e)}")
+        st.markdown('</div>', unsafe_allow_html=True)
